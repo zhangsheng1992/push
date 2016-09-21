@@ -1,0 +1,6 @@
+[server]    
+address=root@182.92.161.188:/zhangsheng/
+
+[git branch]
+origin=root@182.92.161.188:/data/test.git
+production=master
