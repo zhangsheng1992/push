@@ -5,7 +5,7 @@
 
 <h3>Environment depends</h3>
 	##git	A version management repository
-	##rsync	`remote sync｀ is called,Data mirroring backup tool for class UNIX system</li>
+	##rsync	`remote sync｀ is called,Data mirroring backup tool for class UNIX system
 	##php 	A scripting language, if you need a management interface, of course ,you can use other
 				sciprt language.
    
