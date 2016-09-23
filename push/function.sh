@@ -126,3 +126,5 @@ changeversion(){
 	sed 's/<线上>//' $VERSIONLOG > version.bak
 	mv version.bak $VERSIONLOG
 }
+
+# clean(){}

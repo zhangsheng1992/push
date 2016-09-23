@@ -4,18 +4,11 @@
 <h3>support liunx and Mac OS plat</h3>
 
 <h3>Environment depends</h3>
-<<<<<<< HEAD
-	##git	A version management repository
-	##rsync	`remote sync｀ is called,Data mirroring backup tool for class UNIX system
-	##php 	A scripting language, if you need a management interface, of course ,you can use other
-				sciprt language.
-   
-=======
+ 
 		git		A version management repository
 		rsync	`remote sync｀ is called,Data mirroring backup tool for class UNIX system
 		php 	A scripting language, if you need a management interface, of course ,you can use other
 				sciprt language.
->>>>>>> test
 
 <h3>but how to use it?</h3>
 
