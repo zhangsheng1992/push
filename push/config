@@ -1,0 +1,47 @@
+#
+# 这个是脚本的配置文件 你可以在这里配置脚本相关的目录 分支信息
+# This is the script configuration file where you can configure the script related to the directory 
+# branch information
+#
+
+## DIR ##
+# The absolute path to the `push` folder 发布程序根目录
+# example : ROOTDIR=/usr/push
+
+ROOTDIR=
+
+＃ The absolute path to the `work` folder 项目版本库目录
+＃ example: WORKDIR=/usr/work
+
+WORKDIR=
+
+
+## WEB SERVICE ## 
+# 发布服务器的目录,发布的代码将自动同步到这个地址上去,多个地址请注意用,分割,你需要提前配置好ssh或者ftp信任
+# webservice address  Configure SSH trust！ More than one please use `, ` segmentation
+# example: SERVICEADDRESS=root@127.0.0.1:/test,root@127.0.0.2:/test
+
+SERVICEADDRESS=
+
+## BRANCH ##
+# 开发分支 Development Branch
+# example: WORKBRANCH=work
+
+WORKBRANCH=
+
+# 开发分支 Production Branch
+# example: MASTERBRANCH=master
+
+MASTERBRANCH=
+
+## LOG ##
+# 日志记录  log file
+# example: LOGDIR=/usr/push/log
+#		   ERRORLOG=/usr/push/log/error.log
+#		   ACCESSLOG=/usr/push/log/access.log
+#		   ERSIONLOG=/usr/push/log/version.log
+
+LOGDIR=/usr/push/log
+ERRORLOG=
+ACCESSLOG=
+ERSIONLOG=
