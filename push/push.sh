@@ -1,10 +1,11 @@
 #! /bin/sh
-
-# 版本发布程序
+# ----------------------------------------------------------------------
+# filename push.sh
+# reversion 1.1
 # author: zhangsheng_1992@sohu.com
 # date 2016-09-19
-# version 1.0
-# 引入函数库
+# discription 基于git branch的小型项目发布脚本
+# ----------------------------------------------------------------------
 source function.sh
 
 if [ ! -f "config" ]; then
@@ -29,10 +30,6 @@ case "$1" in
 		log
 		;;
 
-	delete)
-		delete
-		;;
-
 	init)
 		init
 		if [ "$2" != "y" ]; then
@@ -49,21 +46,10 @@ case "$1" in
 		;;
 
 	clean)
-		clean
+		clean $2
 		;;
 		
 	*)
-		echo 'can not find command '"$1"':'  'use {init|merge|log|commit|rollback}'
+		echo 'can not find command '"$1"':'  'use {init|merge|log|commit|rollback|clean}'
 		;;
 esac 
-
-
-
-
-
-# var=’1,2,3,4,5’  
-# var=${var//,/ }    #这里是将var中的,替换为空格  
-# for element in $var   
-# do  
-#     echo $element  
-# done 

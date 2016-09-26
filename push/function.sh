@@ -1,5 +1,11 @@
 #! /bin/sh
-# 发布程序函数库
+# ----------------------------------------------------------------------
+# filename function.sh
+# reversion 1.1
+# author: zhangsheng_1992@sohu.com
+# date 2016-09-19
+# discription 发布程序函数库
+# ----------------------------------------------------------------------
 
 # 合并分支代码
 merge(){
@@ -39,10 +45,6 @@ init(){
 		mkdir "$ROOTDIR""/version"
 	fi
 
-	if [ ! -d "$LOGDIR" ];then
-		mkdir "$LOGDIR"
-	fi
-
 	cd $WORKDIR
 	# 检测发布分支
 	if [ `git branch | grep master | awk '{print $1}'` != 'master' ] && [ `git branch | grep master | awk '{print $2}'` != 'master' ]; then
@@ -58,7 +60,7 @@ init(){
 
 
 
-#发布
+#发布 $1 版本描述信息
 commit(){
 	cd $ROOTDIR
 	if [ ! -d "$ROOTDIR""/execute" ]; then
@@ -74,12 +76,7 @@ commit(){
 		MESSAGE=$1
 	fi
 
-	rsync --delete -avzh --exclude ".git"  -e ssh "$ROOTDIR""/execute/" $SERVICEADDRESS 2>>$ERRORLOG 1>/dev/null 
-	if [ "$?" == "1" ]; then
-		echo "[error] `tail -n 1 $ERRORLOG`"
-		exit 0
-	fi
-
+	push
 	COMMITID=`date|md5`
 	changeversion $VERSIONLOG
 	echo '<线上>'` date "+%Y-%m-%d %H:%M:%S"` " $COMMITID" " $MESSAGE" >> $VERSIONLOG 
@@ -97,7 +94,26 @@ log(){
 	awk '{if(NR==1){ print $0  }else{ print $0 } }' $VERSIONLOG | sort -r
 }
 
-#回滚
+#推送到服务器
+push(){
+	var=$SERVICEADDRESS
+	var=${var//,/ }
+	for element in $var   
+	do  
+		if [ ! -n "$1" ]; then
+	    	rsync --delete -avzh --exclude ".git"  -e ssh "$ROOTDIR""/execute/" $element 2>>$ERRORLOG 1>/dev/null 
+		else
+			rsync -avzh --delete --exclude ".git"  -e ssh "$ROOTDIR""/version/""$1/" $SERVICEADDRESS 2>>$ERRORLOG 1>$ACCESSLOG
+		fi
+
+		if [ "$?" == "1" ]; then
+			echo "[error] `tail -n 1 $ERRORLOG`"
+			exit 0
+		fi  
+	done 
+}
+
+#回滚 $1 回滚版本的commitid
 rollback(){
 	
 	if [ ! -n "$1" ]; then
@@ -116,15 +132,28 @@ rollback(){
 		exit 0
 	fi
 
-	rsync -avzh --delete --exclude ".git"  -e ssh "$ROOTDIR""/version/""$1/" $SERVICEADDRESS 2>>$ERRORLOG 1>$ACCESSLOG
+	push $1
 	awk -v number=$NUMBER '{ if(NR==number){gsub(/<线上>/,"",$1);print "<线上>"$0 }else{gsub(/<线上>/,"",$1);print $0}}' $VERSIONLOG > version.bak
 	mv version.bak $VERSIONLOG
 }
 
-#回滚日至文件
+#回滚日志文件
 changeversion(){
 	sed 's/<线上>//' $VERSIONLOG > version.bak
 	mv version.bak $VERSIONLOG
 }
 
-# clean(){}
+#清除旧的备份文件 默认保留最近的10个版本  $1 要删除的版本的commit id
+clean(){
+	if [ ! -n "$1" ]; then
+		NUMBER=`cat $VERSIONLOG | wc -l`
+		awk -v num="$NUMBER" '{ if(NR > num-4){ print $0 } }' $VERSIONLOG  > version.bak
+		RMDIR=`awk -v num="$NUMBER" '{ if(NR < num-4){ print $3" " } }' $VERSIONLOG `
+	else
+		NUMBER=$1
+		awk -v number="$NUMBER" '{ if($3 != number){ print $0 } }' $VERSIONLOG > version.bak
+		RMDIR=`awk -v number="$NUMBER" '{ if( $3 == number ){ print $3 }  }' $VERSIONLOG`
+	fi
+	rm -rf "$ROOTDIR""/version/""$RMDIR"
+	mv version.bak $VERSIONLOG
+}
