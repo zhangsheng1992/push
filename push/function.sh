@@ -1,11 +1,5 @@
 #! /bin/sh
-# ----------------------------------------------------------------------
-# filename function.sh
-# reversion 1.1
-# author: zhangsheng_1992@sohu.com
-# date 2016-09-19
-# discription 发布程序函数库
-# ----------------------------------------------------------------------
+# 发布程序函数库
 
 # 合并分支代码
 merge(){
@@ -60,7 +54,7 @@ init(){
 
 
 
-#发布 $1 版本描述信息
+#发布
 commit(){
 	cd $ROOTDIR
 	if [ ! -d "$ROOTDIR""/execute" ]; then
@@ -94,10 +88,9 @@ log(){
 	awk '{if(NR==1){ print $0  }else{ print $0 } }' $VERSIONLOG | sort -r
 }
 
-#推送到服务器
 push(){
 	var=$SERVICEADDRESS
-	var=${var//,/ }
+	var=${var//,/ }    #这里是将var中的,替换为空格  
 	for element in $var   
 	do  
 		if [ ! -n "$1" ]; then
@@ -113,7 +106,7 @@ push(){
 	done 
 }
 
-#回滚 $1 回滚版本的commitid
+#回滚
 rollback(){
 	
 	if [ ! -n "$1" ]; then
@@ -133,17 +126,18 @@ rollback(){
 	fi
 
 	push $1
+	#rsync -avzh --delete --exclude ".git"  -e ssh "$ROOTDIR""/version/""$1/" $SERVICEADDRESS 2>>$ERRORLOG 1>$ACCESSLOG
 	awk -v number=$NUMBER '{ if(NR==number){gsub(/<线上>/,"",$1);print "<线上>"$0 }else{gsub(/<线上>/,"",$1);print $0}}' $VERSIONLOG > version.bak
 	mv version.bak $VERSIONLOG
 }
 
-#回滚日志文件
+#回滚日至文件
 changeversion(){
 	sed 's/<线上>//' $VERSIONLOG > version.bak
 	mv version.bak $VERSIONLOG
 }
 
-#清除旧的备份文件 默认保留最近的10个版本  $1 要删除的版本的commit id
+
 clean(){
 	if [ ! -n "$1" ]; then
 		NUMBER=`cat $VERSIONLOG | wc -l`

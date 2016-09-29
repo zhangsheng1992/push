@@ -1,11 +1,10 @@
 #! /bin/sh
-# ----------------------------------------------------------------------
-# filename push.sh
-# reversion 1.1
+
+# 版本发布程序
 # author: zhangsheng_1992@sohu.com
 # date 2016-09-19
-# discription 基于git branch的小型项目发布脚本
-# ----------------------------------------------------------------------
+# version 1.0
+# 引入函数库
 source function.sh
 
 if [ ! -f "config" ]; then
