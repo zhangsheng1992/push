@@ -71,7 +71,7 @@ commit(){
 	fi
 
 	push
-	COMMITID=`date|md5`
+	COMMITID=`date|md5sum|awk '{print $1}'`
 	changeversion $VERSIONLOG
 	echo '<线上>'` date "+%Y-%m-%d %H:%M:%S"` " $COMMITID" " $MESSAGE" >> $VERSIONLOG 
 	mv "$ROOTDIR""/execute" "$ROOTDIR""/version/""$COMMITID"

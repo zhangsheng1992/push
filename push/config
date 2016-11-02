@@ -10,8 +10,8 @@
 
 ROOTDIR=
 
-＃ The absolute path to the `work` folder 项目版本库目录
-＃ example: WORKDIR=/usr/work
+# The absolute path to the `work` folder 项目版本库目录
+# example: WORKDIR=/usr/work
 
 WORKDIR=
 
