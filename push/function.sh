@@ -139,15 +139,20 @@ changeversion(){
 
 
 clean(){
+	sed "s/\\n//g" $VERSIONLOG
 	if [ ! -n "$1" ]; then
 		NUMBER=`cat $VERSIONLOG | wc -l`
 		awk -v num="$NUMBER" '{ if(NR > num-4){ print $0 } }' $VERSIONLOG  > version.bak
 		RMDIR=`awk -v num="$NUMBER" '{ if(NR < num-4){ print $3" " } }' $VERSIONLOG `
+		for element in $RMDIR
+		do
+			rm -rf "$ROOTDIR""/version/""$element"
+		done
 	else
 		NUMBER=$1
 		awk -v number="$NUMBER" '{ if($3 != number){ print $0 } }' $VERSIONLOG > version.bak
 		RMDIR=`awk -v number="$NUMBER" '{ if( $3 == number ){ print $3 }  }' $VERSIONLOG`
+		rm -rf "$ROOTDIR""/version/""$RMDIR"
 	fi
-	rm -rf "$ROOTDIR""/version/""$RMDIR"
 	mv version.bak $VERSIONLOG
 }
